@@ -1,0 +1,48 @@
+{
+  "name": "stardust-playground",
+  "description": "Stardust playground",
+  "author": {
+    "name": "Donghao Ren",
+    "email": "donghao.ren@gmail.com",
+    "url": "https://donghaoren.org"
+  },
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:stardust-vis/stardust-playground.git"
+  },
+  "scripts": {
+    "build:typings": "typings install",
+    "build:ts": "tsc",
+    "build:less": "lessc less/playground.less dist/playground.css",
+    "build:pack": "browserify js/playground.js -o dist/playground.bundle.js",
+    "build:pack:runtime": "browserify js/runtime/iframe-webgl.js -o dist/runtime/iframe-webgl.js",
+    "build:copy": "cp index.html dist/ && cp -r ./node_modules/monaco-editor/min/vs dist/monaco-editor/vs && cp -r data dist/",
+    "build": "npm-run-all build:ts build:less build:pack build:pack:runtime build:copy",
+    "deploy": "rm -rf ../stardust-vis.github.io/playground && cp -r dist ../stardust-vis.github.io/playground",
+    "prepublish": "npm run build",
+    "watch:ts": "tsc -w",
+    "watch:bundle": "watchify js/playground.js -o dist/playground.bundle.js -v",
+    "watch:bundle:runtime": "watchify js/runtime/iframe-webgl.js -o dist/runtime/iframe-webgl.js -v",
+    "watch": "npm-run-all --parallel watch:* watch:bundle:*"
+  },
+  "devDependencies": {
+    "browserify": "^13.1.0",
+    "d3": "^3.5.17",
+    "flux": "^3.0.0",
+    "less": "^2.7.1",
+    "monaco-editor": "^0.5.3",
+    "npm-run-all": "^3.1.0",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2"
+  },
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "fbemitter": "^2.1.1",
+    "flux": "^3.0.0",
+    "stardust-core": "0.0.1",
+    "stardust-webgl": "0.0.1",
+    "typescript": "^2.0.10",
+    "typings": "^2.0.0"
+  }
+}

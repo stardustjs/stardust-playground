@@ -1,0 +1,14 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "declaration": true,
+        "jsx": "react",
+        "rootDir": "ts",
+        "outDir": "js",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "target": "es5",
+        "noImplicitAny": true,
+        "sourceMap": true
+    }
+}
