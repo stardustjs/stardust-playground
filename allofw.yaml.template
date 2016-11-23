@@ -1,0 +1,19 @@
+role: both
+
+omnistereo:
+    capture_method: per_projection
+    resolution_scale: 2
+    stereo_mode: anaglyph_red_cyan
+    warpblend:
+        generate: perspective
+        generate_fov: 90
+
+http:
+  port: 8080
+  static: "code/browser"
+
+broadcasting:
+  renderer:
+    sub: tcp://127.0.0.1:50001
+  simulator:
+    pub: tcp://127.0.0.1:50001

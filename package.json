@@ -18,6 +18,7 @@
     "build:pack": "browserify js/playground.js -o dist/playground.bundle.js",
     "build:pack:runtime": "browserify js/runtime/iframe-webgl.js -o dist/runtime/iframe-webgl.js",
     "build:copy": "cp index.html dist/ && cp -r ./node_modules/monaco-editor/min/vs dist/monaco-editor/vs && cp -r data dist/",
+    "build:allosphere": "browserify js/runtime/allosphere/main.js --bare --external d3 --external vm --external fs --external allofw --external socket.io --external zmq --external express --external http -o allosphere.main.js",
     "build": "npm-run-all build:ts build:less build:pack build:pack:runtime build:copy",
     "deploy": "rm -rf ../stardust-vis.github.io/playground && cp -r dist ../stardust-vis.github.io/playground",
     "prepublish": "npm run build",
@@ -40,6 +41,7 @@
   "dependencies": {
     "fbemitter": "^2.1.1",
     "flux": "^3.0.0",
+    "stardust-allofw": "0.0.1",
     "stardust-core": "0.0.1",
     "stardust-webgl": "0.0.1",
     "typescript": "^2.0.10",

@@ -36,6 +36,7 @@ export class ToolbarView extends React.Component<{}, {}> {
                 </select>
                 {" "}
                 <button onClick={(event) => new Actions.Compile().dispatch()}>Run</button>
+                <button onClick={(event) => new Actions.RunInAlloSphere().dispatch()}>Run in AlloSphere</button>
             </div>
         );
     }
@@ -93,6 +94,28 @@ export class PlaygroundRootView extends React.Component<{}, IPlaygroundState> {
         } as any);
     }
 
+    public fetchData(dataFile: string, callback: (data: any) => void) {
+        if(dataFile != null && dataFile != "") {
+            if(dataFile.match(/\.csv$/i)) {
+                d3.csv(dataFile, (err, data) => {
+                    callback(data);
+                });
+            }
+            if(dataFile.match(/\.tsv$/i)) {
+                d3.tsv(dataFile, (err, data) => {
+                    callback(data);
+                });
+            }
+            if(dataFile.match(/\.json$/i)) {
+                d3.json(dataFile, (err, data) => {
+                    callback(data);
+                });
+            }
+        } else {
+            callback(null);
+        }
+    }
+
     public componentDidMount() {
         Actions.GlobalDispatcher.register((action) => {
             if(action instanceof Actions.LoadExample) {
@@ -122,6 +145,17 @@ export class PlaygroundRootView extends React.Component<{}, IPlaygroundState> {
                         compileIndex: new Date().getTime()
                     }
                 } as any);
+            }
+            if(action instanceof Actions.RunInAlloSphere) {
+                this.fetchData(this.state.dataFile, (data) => {
+                    (window as any).postAlloSphereMessage("run", {
+                        dataFile: this.state.dataFile,
+                        viewType: this.state.viewType,
+                        backgroundColor: this.state.backgroundColor,
+                        code: this.state.jsCode,
+                        data: data
+                    });
+                });
             }
         });
 

@@ -8,10 +8,17 @@
     </head>
     <body>
         <div id="root"></div>
+        <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
         <script type="text/javascript" src="playground.bundle.js"></script>
         <script src="monaco-editor/vs/loader.js"></script>
         <script>
             require.config({ paths: { 'vs': 'monaco-editor/vs' }});
+            let socket = io("http://192.168.10.80:8080");
+            window.postAlloSphereMessage = function(path) {
+                socket.emit('m', [
+                    path, Array.prototype.slice.call(arguments, 1)
+                ]);
+            };
             window.playgroundInitialize();
         </script>
     </body>

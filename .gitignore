@@ -1,5 +1,7 @@
+allofw.yaml
 node_modules/
 typings/
 js/
 css/
 dist/
+allosphere.main.js

@@ -8,6 +8,11 @@ export class Action {
     }
 }
 
+export class RunInAlloSphere extends Action {
+    constructor(
+    ) { super(); }
+}
+
 export class LoadExample extends Action {
     constructor(
         public exampleName: string
