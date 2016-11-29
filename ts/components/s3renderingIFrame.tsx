@@ -34,7 +34,8 @@ export interface IS3RenderingViewProps {
 }
 
 export interface IS3RenderingViewState {
-    iFrameSrc: string;
+    iFrameInnerHTML: string;
+    compileIndex: string;
 }
 
 export interface IS3OverlayViewProps {
@@ -153,7 +154,8 @@ export class S3RenderingView extends React.Component<IS3RenderingViewProps, IS3R
     constructor(props: IS3RenderingViewProps) {
         super(props);
         this.state = {
-            iFrameSrc: ""
+            iFrameInnerHTML: "",
+            compileIndex: ""
         }
     };
 
@@ -200,10 +202,11 @@ export class S3RenderingView extends React.Component<IS3RenderingViewProps, IS3R
             }
         `;
         let innerHTML = iFrameHTMLTemplate.replace("_USER_CODE_DATAURL_", this.toDataURL(userCode, "text/javascript"));
-        if(this.state.iFrameSrc != innerHTML) {
+        if(this.state.iFrameInnerHTML != innerHTML) {
             if(this.refs.overlay) this.refs.overlay.reset();
             this.setState({
-                iFrameSrc: innerHTML
+                iFrameInnerHTML: innerHTML,
+                compileIndex: props.compileIndex
             });
         }
     }
@@ -224,15 +227,16 @@ export class S3RenderingView extends React.Component<IS3RenderingViewProps, IS3R
     public render() {
         return (
             <div className="s3rendering-view" style={{ width: this.props.width + "px", height: this.props.height + "px" }}>
-                <iframe
+                {[<iframe
                     ref="frame"
-                    srcDoc={this.state.iFrameSrc}
+                    key={`k${this.state.compileIndex}`}
+                    srcDoc={this.state.iFrameInnerHTML}
                     width={this.props.width}
                     height={this.props.height}
                     style={{
                         border: "none"
                     }}
-                />
+                />]}
                 <S3OverlayView ref="overlay" parent={this} />
             </div>
         );

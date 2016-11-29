@@ -9,6 +9,18 @@
 
     export let examples: ExampleInfo[] = [
   {
+    "name": "Binning",
+    "viewType": "2D",
+    "dataFile": "",
+    "jsCode": "// Convert the SVG file to Stardust shape spec.\nlet isotype = new Stardust.shape.circle();\n\n// Create the shape object.\nlet isotypes = Stardust.shape.create(isotype, platform);\n\nlet isotypeHeight = 18;\n\nlet xScale = Stardust.scale.linear()\n    .domain([ 0, 1 ])\n    .range([ 20, 28 ]);\nlet yScale = Stardust.scale.linear()\n    .domain([ 0, 1 ])\n    .range([ 468, 460 ]);\n\nlet colors = [[31,119,180],[255,127,14],[44,160,44]];\ncolors = colors.map((x) => [ x[0] / 255, x[1] / 255, x[2] / 255, 1 ]);\n\nisotypes.attr(\"center\", Stardust.scale.Vector2(\n    xScale(d => d % 5),\n    yScale(d => Math.floor(d / 5))\n));\nisotypes.attr(\"radius\", 4.0);\nisotypes.attr(\"color\", [ 0, 0, 0, 1 ]);\n\nisotypes.instance((d, index) => {\n    let data = [];\n    for(let i = 0; i < d * 2; i++) data.push(i);\n    return {\n        data: data,\n        attrs: {\n            color: colors[index % colors.length]\n        },\n        onRender: () => {\n            let offset = 20 + 160 * Math.floor(index / colors.length) + (index % colors.length) * 45;\n            xScale.range([ offset, 8 + offset ]);\n        }\n    };\n});\n\nisotypes.data([\n    27, 53, 91, 52, 112, 42, 107, 91, 68, 56, 115, 86, 26, 102, 28, 23, 119, 110\n]);\n\nfunction render() {\n    isotypes.render();\n}\n",
+    "background": [
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  {
     "name": "Simple Bar Chart",
     "viewType": "2D",
     "dataFile": "",
@@ -84,7 +96,7 @@
     "name": "Parallel Coordinates (Polylines)",
     "viewType": "2D",
     "dataFile": "data/mnist.csv",
-    "jsCode": "var polyline = Stardust.shape.polyline();\nvar shape = Stardust.shape.create(polyline, platform);\n\nvar instances = DATA.map(function(d) {\n    return {\n        C0: +d.C0, C1: +d.C1, C2: +d.C2, C3: +d.C3, C4: +d.C4,\n        C5: +d.C5, C6: +d.C6, C7: +d.C7, C8: +d.C8, C9: +d.C9,\n        assigned: parseInt(d.Assigned.substr(1))\n    };\n});\n\nvar colors = [[31,119,180],[255,127,14],[44,160,44],[214,39,40],[148,103,189],[140,86,75],[227,119,194],[127,127,127],[188,189,34],[23,190,207]];\ncolors = colors.map((x) => [ x[0] / 255, x[1] / 255, x[2] / 255, 0.5 ]);\n\nvar yScale = Stardust.scale.linear().domain([ 0, 1 ]).range([ 500, 100 ]);\nvar xScale = Stardust.scale.linear().domain([ 0, 9 ]).range([ 100, 700 ]);\n\nshape.attr(\"p\", Stardust.scale.Vector2(\n    xScale(d => d[0]),\n    yScale(d => d[1])\n));\nshape.attr(\"width\", 1);\nshape.attr(\"color\", [ 0, 0, 0, 1 ]);\n\nlet indices = [ 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9 ];\nlet convertInstance = (inst) => indices.map(i => [i, inst[\"C\" + i]]);\n\nshape.instance((d) => {\n    return {\n        data: convertInstance(d),\n        attrs: {\n            color: colors[d.assigned]\n        }\n    }\n})\n\nshape.data(instances.slice(0, 300));\n\naddSlider(\"Width\", shape, \"width\", 1, 0, 2);\n\nfunction render() {\n    shape.render();\n}\n",
+    "jsCode": "var polyline = Stardust.shape.polyline();\nvar shape = Stardust.shape.create(polyline, platform);\n\nvar instances = DATA.map(function(d) {\n    return {\n        C0: +d.C0, C1: +d.C1, C2: +d.C2, C3: +d.C3, C4: +d.C4,\n        C5: +d.C5, C6: +d.C6, C7: +d.C7, C8: +d.C8, C9: +d.C9,\n        assigned: parseInt(d.Assigned.substr(1))\n    };\n});\n\nvar colors = [[31,119,180],[255,127,14],[44,160,44],[214,39,40],[148,103,189],[140,86,75],[227,119,194],[127,127,127],[188,189,34],[23,190,207]];\ncolors = colors.map((x) => [ x[0] / 255, x[1] / 255, x[2] / 255, 0.5 ]);\n\nvar yScale = Stardust.scale.linear().domain([ 0, 1 ]).range([ 500, 100 ]);\nvar xScale = Stardust.scale.linear().domain([ 0, 9 ]).range([ 100, 700 ]);\n\nshape.attr(\"p\", Stardust.scale.Vector2(\n    xScale(d => d[0]),\n    yScale(d => d[1])\n));\nshape.attr(\"width\", 1);\nshape.attr(\"color\", [ 0, 0, 0, 1 ]);\n\nlet indices = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ];\nlet convertInstance = (inst) => indices.map(i => [i, inst[\"C\" + i]]);\n\nshape.instance((d) => {\n    return {\n        data: convertInstance(d),\n        attrs: {\n            color: colors[d.assigned]\n        }\n    }\n})\n\nshape.data(instances.slice(0, 300));\n\naddSlider(\"Width\", shape, \"width\", 1, 0, 2);\n\nfunction render() {\n    shape.render();\n}\n",
     "background": [
       1,
       1,

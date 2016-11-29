@@ -26,7 +26,7 @@ shape.attr("p", Stardust.scale.Vector2(
 shape.attr("width", 1);
 shape.attr("color", [ 0, 0, 0, 1 ]);
 
-let indices = [ 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9 ];
+let indices = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ];
 let convertInstance = (inst) => indices.map(i => [i, inst["C" + i]]);
 
 shape.instance((d) => {
