@@ -2,10 +2,10 @@
 /// type: 3D
 /// data: data/beethoven.json
 
-let shapes = Stardust.shape.compile(`
+let marks = Stardust.mark.compile(`
     import Triangle from P3D;
 
-    shape Point(
+    mark Point(
         center: Vector3,
         size: float,
         color: Color
@@ -20,7 +20,7 @@ let shapes = Stardust.shape.compile(`
         Triangle(p4, p3, p1, color);
     }
 
-    shape Line(
+    mark Line(
         p1: Vector3, p2: Vector3,
         size: float,
         color: Color
@@ -54,7 +54,7 @@ let shapes = Stardust.shape.compile(`
         return Vector3(x, y, z);
     }
 
-    shape Glyph(
+    mark Glyph(
         year: float,
         dayOfYear: float,
         secondOfDay: float,
@@ -67,7 +67,7 @@ let shapes = Stardust.shape.compile(`
         Point(p * (1 - t) + p2 * t, log(1 + duration) / 2, color = color);
     }
 
-    shape LineChart(
+    mark LineChart(
         year1: float,
         dayOfYear1: float,
         secondOfDay1: float,
@@ -90,8 +90,8 @@ let shapes = Stardust.shape.compile(`
     }
 `);
 
-let shape = Stardust.shape.create(shapes.Glyph, platform);
-let lineChart = Stardust.shape.create(shapes.LineChart, platform);
+let mark = Stardust.mark.create(marks.Glyph, platform);
+let lineChart = Stardust.mark.create(marks.LineChart, platform);
 
 DATA.forEach((d) => {
     d.duration = (d.checkInFirst - d.checkOut) / 86400;
@@ -129,15 +129,15 @@ let dayOfYear = (d) => {
 let secondOfDay = (d) => {
     return d.getMinutes() * 60 + d.getHours() * 3600 + d.getSeconds();
 }
-shape.attr("duration", (d) => d.duration);
-shape.attr("year", (d) => d.checkOut.getFullYear());
-shape.attr("dayOfYear", (d) => dayOfYear(d.checkOut));
-shape.attr("secondOfDay", (d) => secondOfDay(d.checkOut));
-shape.attr("color", color);
-// shape.attr("inYear", (d) => d.checkIn.getFullYear());
-// shape.attr("inDayOfYear", (d) => dayOfYear(d.checkIn));
-// shape.attr("inSecondOfDay", (d) => secondOfDay(d.checkIn));
-shape.data(DATA);
+mark.attr("duration", (d) => d.duration);
+mark.attr("year", (d) => d.checkOut.getFullYear());
+mark.attr("dayOfYear", (d) => dayOfYear(d.checkOut));
+mark.attr("secondOfDay", (d) => secondOfDay(d.checkOut));
+mark.attr("color", color);
+// mark.attr("inYear", (d) => d.checkIn.getFullYear());
+// mark.attr("inDayOfYear", (d) => dayOfYear(d.checkIn));
+// mark.attr("inSecondOfDay", (d) => secondOfDay(d.checkIn));
+mark.data(DATA);
 
 lineChart.attr("year1", (d) => d.day.getFullYear());
 lineChart.attr("dayOfYear1", (d) => dayOfYear(d.day));
@@ -150,10 +150,10 @@ lineChart.attr("c1", zScale((d) => d.count));
 lineChart.attr("c2", zScale((d, i) => daysArray[i + 1].count));
 lineChart.data(daysArray.slice(0, -1));
 
-addSlider("t", shape, "t", 0, 0, 1);
+addSlider("t", mark, "t", 0, 0, 1);
 
 function render() {
-    lineChart.attr("t", shape.attr("t"));
+    lineChart.attr("t", mark.attr("t"));
     lineChart.render();
-    shape.render();
+    mark.render();
 }

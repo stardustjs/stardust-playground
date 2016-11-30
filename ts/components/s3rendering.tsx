@@ -150,8 +150,8 @@ export class S3RenderingView extends React.Component<IS3RenderingViewProps, IS3R
     public startUserProgramWithData(data: any) {
         let GL = this._GL;
         let D3 = d3;
-        let addSlider = (name: string, shape: Stardust.Shape, attr: string, initial: number, min: number, max: number) => {
-            shape.attr(attr, initial);
+        let addSlider = (name: string, mark: Stardust.Mark, attr: string, initial: number, min: number, max: number) => {
+            mark.attr(attr, initial);
             let control: ControlInfoSlider = {
                 type: "slider",
                 name: name,
@@ -160,7 +160,7 @@ export class S3RenderingView extends React.Component<IS3RenderingViewProps, IS3R
                 max: max,
                 onChange: (val: number) => {
                     control.value = val;
-                    shape.attr(attr, val);
+                    mark.attr(attr, val);
                     this.updateControl(control);
                     this._reRender();
                 }

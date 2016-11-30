@@ -2,8 +2,8 @@
 /// type: 2D
 /// data: data/mnist.csv
 
-var polyline = Stardust.shape.polyline();
-var shape = Stardust.shape.create(polyline, platform);
+var polyline = Stardust.mark.polyline();
+var mark = Stardust.mark.create(polyline, platform);
 
 var instances = DATA.map(function(d) {
     return {
@@ -19,17 +19,17 @@ colors = colors.map((x) => [ x[0] / 255, x[1] / 255, x[2] / 255, 0.5 ]);
 var yScale = Stardust.scale.linear().domain([ 0, 1 ]).range([ 500, 100 ]);
 var xScale = Stardust.scale.linear().domain([ 0, 9 ]).range([ 100, 700 ]);
 
-shape.attr("p", Stardust.scale.Vector2(
+mark.attr("p", Stardust.scale.Vector2(
     xScale(d => d[0]),
     yScale(d => d[1])
 ));
-shape.attr("width", 1);
-shape.attr("color", [ 0, 0, 0, 1 ]);
+mark.attr("width", 1);
+mark.attr("color", [ 0, 0, 0, 1 ]);
 
-let indices = [ 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9 ];
+let indices = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ];
 let convertInstance = (inst) => indices.map(i => [i, inst["C" + i]]);
 
-shape.instance((d) => {
+mark.instance((d) => {
     return {
         data: convertInstance(d),
         attrs: {
@@ -38,10 +38,10 @@ shape.instance((d) => {
     }
 })
 
-shape.data(instances.slice(0, 300));
+mark.data(instances.slice(0, 300));
 
-addSlider("Width", shape, "width", 1, 0, 2);
+addSlider("Width", mark, "width", 1, 0, 2);
 
 function render() {
-    shape.render();
+    mark.render();
 }

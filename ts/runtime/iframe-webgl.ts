@@ -134,7 +134,7 @@ setWindowProperty("print", (message: string) => {
         }
     });
 });
-setWindowProperty("addSlider", (name: string, shape: Stardust.Shape, attr: string, defaultValue: number, min: number, max: number) => {
+setWindowProperty("addSlider", (name: string, mark: Stardust.Mark, attr: string, defaultValue: number, min: number, max: number) => {
     postMessage({
         type: "control.add",
         control: {
@@ -146,9 +146,9 @@ setWindowProperty("addSlider", (name: string, shape: Stardust.Shape, attr: strin
             value: defaultValue
         }
     });
-    shape.attr(attr, defaultValue);
+    mark.attr(attr, defaultValue);
     controlCallbacks.set(name, (value: number) => {
-        shape.attr(attr, value);
+        mark.attr(attr, value);
         doReRender();
     })
 });

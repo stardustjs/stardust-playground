@@ -5,7 +5,7 @@
 
 let demovote = DATA;
 
-let shape = Stardust.shape.compile(`
+let mark = Stardust.mark.compile(`
     import Cube from P3D;
 
     let longitude: float;
@@ -53,7 +53,7 @@ let shape = Stardust.shape.compile(`
         return t;
     }
 
-    shape Shape(color: Color, t1: float, t2: float, t3: float, ki1: float, ki2: float, ki3: float) {
+    mark Mark(color: Color, t1: float, t2: float, t3: float, ki1: float, ki2: float, ki3: float) {
         let p1 = getPositionScatterplot();
         let p2 = getPositionStateBins();
         let p3 = getPositionXYBinning();
@@ -66,8 +66,8 @@ let shape = Stardust.shape.compile(`
             color
         );
     }
-`)["Shape"];
-let shapes = Stardust.shape.create(shape, platform);
+`)["Mark"];
+let marks = Stardust.mark.create(mark, platform);
 
 demovote.forEach(d => {
     d.Longitude = +d.Longitude;
@@ -129,7 +129,7 @@ let scaleColor = (value) => {
     }
 }
 
-shapes
+marks
     .attr("index", d => d.index / (demovote.length - 1))
     .attr("longitude", d => d.Longitude)
     .attr("latitude", d => d.Latitude)
@@ -143,26 +143,26 @@ shapes
 function setT(t) {
     if(t >= 0 && t <= 1) {
         let tt = t * 1.3 - 0.3;
-        shapes.attr("t1", 1 - tt).attr("t2", tt).attr("t3", 0).attr("ki1", -0.3).attr("ki2", +0.3).attr("ki3", 0);
+        marks.attr("t1", 1 - tt).attr("t2", tt).attr("t3", 0).attr("ki1", -0.3).attr("ki2", +0.3).attr("ki3", 0);
     } else if(t >= 1 && t <= 2) {
-        shapes.attr("t1", 0).attr("t2", 1).attr("t3", 0).attr("ki1", 0).attr("ki2", 0).attr("ki3", 0);
+        marks.attr("t1", 0).attr("t2", 1).attr("t3", 0).attr("ki1", 0).attr("ki2", 0).attr("ki3", 0);
     } else if(t >= 2 && t <= 3) {
         let tt = (t - 2) * 1.3 - 0.3;
-        shapes.attr("t1", 0).attr("t2", 1 - tt).attr("t3", tt).attr("ki1", 0).attr("ki2", -0.3).attr("ki3", +0.3);
+        marks.attr("t1", 0).attr("t2", 1 - tt).attr("t3", tt).attr("ki1", 0).attr("ki2", -0.3).attr("ki3", +0.3);
     } else if(t >= 3 && t <= 4) {
-        shapes.attr("t1", 0).attr("t2", 0).attr("t3", 1).attr("ki1", 0).attr("ki2", 0).attr("ki3", 0);
+        marks.attr("t1", 0).attr("t2", 0).attr("t3", 1).attr("ki1", 0).attr("ki2", 0).attr("ki3", 0);
     } else if(t >= 4 && t <= 5) {
         let tt = (t - 4) * 1.3 - 0.3;
-        shapes.attr("t1", tt).attr("t2", 0).attr("t3", 1 - tt).attr("ki1", +0.3).attr("ki2", 0).attr("ki3", -0.3);
+        marks.attr("t1", tt).attr("t2", 0).attr("t3", 1 - tt).attr("ki1", +0.3).attr("ki2", 0).attr("ki3", -0.3);
     } else {
-        shapes.attr("t1", 1).attr("t2", 0).attr("t3", 0).attr("ki1", 0).attr("ki2", 0).attr("ki3", 0);
+        marks.attr("t1", 1).attr("t2", 0).attr("t3", 0).attr("ki1", 0).attr("ki2", 0).attr("ki3", 0);
     }
 }
 
-shapes.data(demovote);
+marks.data(demovote);
 
 function render() {
-    shapes.render();
+    marks.render();
 }
 
 function animate(t) {

@@ -1,10 +1,10 @@
 /// name: Simple Bar Chart
 /// type: 2D
 
-var shapes = Stardust.shape.compile(`
+var marks = Stardust.mark.compile(`
     import Rectangle from P2D;
 
-    shape Bar(
+    mark Bar(
         index: float,
         height: float,
         N: float,
@@ -21,7 +21,7 @@ var shapes = Stardust.shape.compile(`
     }
 `);
 
-var area = Stardust.shape.create(shapes.Bar, platform);
+var area = Stardust.mark.create(marks.Bar, platform);
 area.attr("index", (d, i) => i);
 area.attr("height", (d, i) => d);
 area.attr("x0", 10.5);
@@ -40,7 +40,7 @@ for(let i = 0; i < 100000; i++) array.push(Math.cos(i / 2534) + Math.sin(i /  53
 area.attr("N", array.length);
 area.data(array);
 
-var bar = Stardust.shape.create(shapes.Bar, platform);
+var bar = Stardust.mark.create(marks.Bar, platform);
 bar.attr("index", (d, i) => i);
 bar.attr("height", (d, i) => d);
 bar.attr("x0", 10);

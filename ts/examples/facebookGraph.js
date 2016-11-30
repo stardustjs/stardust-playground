@@ -2,8 +2,8 @@
 /// type: 2D
 /// data: data/facebook_1912.json
 
-var snodes = Stardust.shape.create(Stardust.shape.circle(8), platform);
-var sedges = Stardust.shape.create(Stardust.shape.line(), platform);
+var snodes = Stardust.mark.create(Stardust.mark.circle(8), platform);
+var sedges = Stardust.mark.create(Stardust.mark.line(), platform);
 
 var width = 600;
 var height = 600;

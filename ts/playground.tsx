@@ -52,7 +52,6 @@ export interface IPlaygroundState {
     height: number;
 
     panelWidth: number;
-    shapeCodeHeight: number;
 
     compiled: {
         viewType: "2D" | "3D";
@@ -66,7 +65,6 @@ export interface IPlaygroundState {
 export class PlaygroundRootView extends React.Component<{}, IPlaygroundState> {
     refs: {
         [ name: string ]: Element | MonacoEditor;
-        shapeCodeEditor: MonacoEditor;
         jsCodeEditor: MonacoEditor;
         inputDataFile: HTMLInputElement;
         input3D: HTMLInputElement;
@@ -82,8 +80,7 @@ export class PlaygroundRootView extends React.Component<{}, IPlaygroundState> {
             compiled: null,
             width: window.innerWidth,
             height: window.innerHeight,
-            panelWidth: 400,
-            shapeCodeHeight: 400
+            panelWidth: 400
         };
     }
 

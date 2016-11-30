@@ -2,7 +2,7 @@
 /// type: 2D
 /// data: data/mnist.csv
 
-var shapes = Stardust.shape.compile(`
+var marks = Stardust.mark.compile(`
     import Rectangle, OutlinedRectangle from P2D;
 
     let size: float = 2;
@@ -29,7 +29,7 @@ var shapes = Stardust.shape.compile(`
     let label: float;
     let color: Color;
 
-    shape BinnedSquare() {
+    mark BinnedSquare() {
         let x = x0 + xSpacing * assigned;
         let y = y1 - bin * binSpacing;
         let bx = binIx * spacing;
@@ -49,7 +49,7 @@ var shapes = Stardust.shape.compile(`
         Rectangle(p1a * (1 - t) + p1b * t, p2a * (1 - t) + p2b * t, color);
     }
 
-    shape BinnedOutlinedSquare() {
+    mark BinnedOutlinedSquare() {
         let x = x0 + xSpacing * label;
         let y = y1 - bin * binSpacing;
         let bx = binIx * spacing;
@@ -135,35 +135,35 @@ instances.forEach(function(d) {
 var colors = [[31,119,180],[255,127,14],[44,160,44],[214,39,40],[148,103,189],[140,86,75],[227,119,194],[127,127,127],[188,189,34],[23,190,207]];
 colors = colors.map((x) => [ x[0] / 255, x[1] / 255, x[2] / 255, 1 ]);
 
-var shape = Stardust.shape.create(shapes.BinnedSquare, platform);
-shape.attr("color", (d) => colors[d.label]);
-shape.attr("label", (d) => d.label);
-shape.attr("assigned", (d) => d.assigned);
-shape.attr("binIx", (d) => Math.floor(d.binIndex / 15));
-shape.attr("binIy", (d) => d.binIndex % 15);
-shape.attr("CMwh", (d) => Math.ceil(Math.sqrt(d.CMCount)));
-shape.attr("CMIx", (d) => Math.floor(d.CMIndex / shape.attr("CMwh")(d)));
-shape.attr("CMIy", (d) => d.CMIndex % shape.attr("CMwh")(d));
-shape.attr("bin", (d) => d.scoreBin);
+var mark = Stardust.mark.create(marks.BinnedSquare, platform);
+mark.attr("color", (d) => colors[d.label]);
+mark.attr("label", (d) => d.label);
+mark.attr("assigned", (d) => d.assigned);
+mark.attr("binIx", (d) => Math.floor(d.binIndex / 15));
+mark.attr("binIy", (d) => d.binIndex % 15);
+mark.attr("CMwh", (d) => Math.ceil(Math.sqrt(d.CMCount)));
+mark.attr("CMIx", (d) => Math.floor(d.CMIndex / mark.attr("CMwh")(d)));
+mark.attr("CMIy", (d) => d.CMIndex % mark.attr("CMwh")(d));
+mark.attr("bin", (d) => d.scoreBin);
 
-var shape2 = Stardust.shape.create(shapes.BinnedOutlinedSquare, platform);
-shape2.attr("color", (d) => colors[d.assigned]);
-shape2.attr("label", (d) => d.label);
-shape2.attr("assigned", (d) => d.assigned);
-shape2.attr("binIx", (d) => Math.floor(d.binIndex2 / 15));
-shape2.attr("binIy", (d) => d.binIndex2 % 15);
-shape2.attr("CMwh", (d) => Math.ceil(Math.sqrt(d.CMCount)));
-shape2.attr("CMIx", (d) => Math.floor(d.CMIndex / shape2.attr("CMwh")(d)));
-shape2.attr("CMIy", (d) => d.CMIndex % shape2.attr("CMwh")(d));
-shape2.attr("bin", (d) => d.scoreBin);
+var mark2 = Stardust.mark.create(marks.BinnedOutlinedSquare, platform);
+mark2.attr("color", (d) => colors[d.assigned]);
+mark2.attr("label", (d) => d.label);
+mark2.attr("assigned", (d) => d.assigned);
+mark2.attr("binIx", (d) => Math.floor(d.binIndex2 / 15));
+mark2.attr("binIy", (d) => d.binIndex2 % 15);
+mark2.attr("CMwh", (d) => Math.ceil(Math.sqrt(d.CMCount)));
+mark2.attr("CMIx", (d) => Math.floor(d.CMIndex / mark2.attr("CMwh")(d)));
+mark2.attr("CMIy", (d) => d.CMIndex % mark2.attr("CMwh")(d));
+mark2.attr("bin", (d) => d.scoreBin);
 
-addSlider("t", shape, "t", 0, 0, 1);
+addSlider("t", mark, "t", 0, 0, 1);
 
-shape.data(instances);
-shape2.data(instances.filter((d) => d.label != d.assigned));
+mark.data(instances);
+mark2.data(instances.filter((d) => d.label != d.assigned));
 
 function render() {
-    shape2.attr("t", shape.attr("t"));
-    shape2.render();
-    shape.render();
+    mark2.attr("t", mark.attr("t"));
+    mark2.render();
+    mark.render();
 }

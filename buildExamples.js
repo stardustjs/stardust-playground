@@ -3,6 +3,7 @@ let path = require("path");
 
 let examplesPrefix = "ts/examples";
 let examples = [
+    "isotype.js",
     "barChart.js",
     "sin2D.js",
     "sin3D.js",
