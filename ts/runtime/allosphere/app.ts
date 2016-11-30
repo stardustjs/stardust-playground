@@ -44,7 +44,7 @@ export function Renderer(app: any) {
     omni.setLens(6.5, 500);
     omni.setClipRange(0.1, 1000);
 
-    let platform = new StardustAllofw.AllofwPlatform3DGS(window, omni);
+    let platform = new StardustAllofw.AllofwPlatform3D(window, omni);
 
     // Time sync.
     var time_diff = 0;
