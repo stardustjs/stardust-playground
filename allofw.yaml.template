@@ -10,7 +10,7 @@ omnistereo:
 
 http:
   port: 8080
-  static: "code/browser"
+  static: "dist"
 
 broadcasting:
   renderer:
