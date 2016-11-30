@@ -1,7 +1,7 @@
 /// name: Sin 3D
 /// type: 3D
 
-var shapes = Stardust.shape.compile(`
+var marks = Stardust.mark.compile(`
     import Triangle from P3D;
 
     let k1: float;
@@ -12,7 +12,7 @@ var shapes = Stardust.shape.compile(`
         return Vector3(cos(x * k1), cos(x * k2), cos(x * k3)) * 100;
     }
 
-    shape Shape(
+    mark Mark(
         x: float
     ) {
         let sz = 1.0;
@@ -25,11 +25,11 @@ var shapes = Stardust.shape.compile(`
     }
 `);
 
-var shape = Stardust.shape.create(shapes.Shape, platform);
-shape.attr("x", (d) => d);
-addSlider("k1", shape, "k1", 16.707, 0, 20);
-addSlider("k2", shape, "k2", 14.317, 0, 20);
-addSlider("k3", shape, "k3", 17.049, 0, 20);
+var mark = Stardust.mark.create(marks.Mark, platform);
+mark.attr("x", (d) => d);
+addSlider("k1", mark, "k1", 16.707, 0, 20);
+addSlider("k2", mark, "k2", 14.317, 0, 20);
+addSlider("k3", mark, "k3", 17.049, 0, 20);
 
 var data = [];
 var N = 100000;
@@ -37,8 +37,8 @@ for(var k = 0; k < N; k++) {
     var x = k / N * Math.PI * 2 * 20;
     data.push(x);
 }
-shape.data(data);
+mark.data(data);
 
 function render() {
-    shape.render();
+    mark.render();
 }

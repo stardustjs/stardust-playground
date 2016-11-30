@@ -1,11 +1,11 @@
 /// name: Binning
 /// type: 2D
 
-// Convert the SVG file to Stardust shape spec.
-let isotype = new Stardust.shape.circle();
+// Convert the SVG file to Stardust mark spec.
+let isotype = new Stardust.mark.circle();
 
-// Create the shape object.
-let isotypes = Stardust.shape.create(isotype, platform);
+// Create the mark object.
+let isotypes = Stardust.mark.create(isotype, platform);
 
 let isotypeHeight = 18;
 

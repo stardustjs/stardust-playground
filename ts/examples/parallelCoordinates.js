@@ -2,10 +2,10 @@
 /// type: 2D
 /// data: data/mnist.csv
 
-var shapes = Stardust.shape.compile(`
+var marks = Stardust.mark.compile(`
     import Triangle from P2D;
 
-    shape PCLine(
+    mark PCLine(
         p1: Vector2,
         p2: Vector2,
         width: float,
@@ -21,7 +21,7 @@ var shapes = Stardust.shape.compile(`
         Triangle(m2, n2, n1, color);
     }
 
-    shape PC(
+    mark PC(
         x0: float, x1: float, x2: float,
         y0: float, y1: float, y2: float,
         alpha: float,
@@ -32,7 +32,7 @@ var shapes = Stardust.shape.compile(`
     }
 `);
 
-var shape = Stardust.shape.create(shapes.PC, platform);
+var mark = Stardust.mark.create(marks.PC, platform);
 
 var instances = DATA.map(function(d) {
     return {
@@ -48,14 +48,14 @@ colors = colors.map((x) => [ x[0] / 255, x[1] / 255, x[2] / 255, 0.1 ]);
 var mY = Stardust.scale.log().domain([ 0.01, 1 ]).range([ 500, 100 ]);
 
 var xScale = d3.scale.linear().domain([ 0, 2 ]).range([ 100, 700 ]);
-shape.attr("y0", mY((d) => d.C0)).attr("x0", xScale(0));
-shape.attr("y1", mY((d) => d.C1)).attr("x1", xScale(1));
-shape.attr("y2", mY((d) => d.C2)).attr("x2", xScale(2));
-shape.attr("color", (d) => colors[d.assigned]);
-shape.data(instances);
+mark.attr("y0", mY((d) => d.C0)).attr("x0", xScale(0));
+mark.attr("y1", mY((d) => d.C1)).attr("x1", xScale(1));
+mark.attr("y2", mY((d) => d.C2)).attr("x2", xScale(2));
+mark.attr("color", (d) => colors[d.assigned]);
+mark.data(instances);
 
-addSlider("Alpha", shape, "alpha", 0.02, 0, 0.1);
+addSlider("Alpha", mark, "alpha", 0.02, 0, 0.1);
 
 function render() {
-    shape.render();
+    mark.render();
 }
