@@ -7,15 +7,24 @@ import * as Stardust from "stardust-core";
 import * as StardustAllofw from "stardust-allofw";
 
 import { Context, IUserCodeConfig } from "./context";
+import { WebVRContext } from "./webvr";
 
 let allofwutils = require("allofwutils");
 
 export function Simulator(app: any) {
+    let currentUserCodeConfig: IUserCodeConfig = null;
+
     app.server.on("run", (config: IUserCodeConfig) => {
         app.networking.broadcast("run", config);
+        currentUserCodeConfig = config;
     });
     app.server.on("stop", () => {
         app.networking.broadcast("stop");
+    });
+
+    app.server.app.get("/webvr", (req: any, res: any) => {
+        let webvr = new WebVRContext(currentUserCodeConfig);
+        res.send(webvr.generateHTML());
     });
 
     // Periodically sync time.

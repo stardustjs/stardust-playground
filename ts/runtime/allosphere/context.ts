@@ -27,7 +27,7 @@ export class Context {
         this._isInitialized = false;
         this._isStarted = false;
         try {
-            this._script = new vm.Script(config.code, {
+            this._script = new vm.Script(`"use strict";\n` + config.code, {
                 filename: "main.js"
             });
         } catch(e) {
