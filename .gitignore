@@ -1,5 +1,3 @@
 node_modules/
-typings/
-js/
-css/
+src/examples.ts
 dist/

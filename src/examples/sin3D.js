@@ -2,7 +2,7 @@
 /// type: 3D
 
 var marks = Stardust.mark.compile(`
-    import Triangle from P3D;
+    import { Triangle } from P3D;
 
     let k1: float;
     let k2: float;
@@ -33,7 +33,7 @@ addSlider("k3", mark, "k3", 17.049, 0, 20);
 
 var data = [];
 var N = 100000;
-for(var k = 0; k < N; k++) {
+for (var k = 0; k < N; k++) {
     var x = k / N * Math.PI * 2 * 20;
     data.push(x);
 }

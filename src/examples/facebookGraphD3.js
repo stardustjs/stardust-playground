@@ -9,15 +9,14 @@ var nodes = DATA.nodes;
 var edges = DATA.edges;
 var N = nodes.length;
 
-for(var i = 0; i < N; i++) {
+for (var i = 0; i < N; i++) {
     nodes[i].x = Math.random() * width;
     nodes[i].y = Math.random() * height;
 }
 
-var sedges = svg.selectAll("line").data(edges);
-sedges.enter().append("line");
-var snodes = svg.selectAll("circle").data(nodes);
-snodes.enter().append("circle");
+var sedges = svg.selectAll("line").data(edges).enter().append("line");
+var snodes = svg.selectAll("circle").data(nodes).enter().append("circle");
+
 
 snodes.attr("cx", (d) => d.x);
 snodes.attr("cy", (d) => d.y);
@@ -30,15 +29,21 @@ sedges.attr("y2", (d) => d.target.y);
 snodes.style("fill", "rgba(0, 0, 0, 0.5)");
 sedges.style("stroke", "rgba(0, 0, 0, 0.02)");
 
-var force = d3.layout.force()
-    .size([ width, height ])
-    .nodes(nodes)
-    .links(edges);
+var force = d3.forceSimulation()
+    .force("link", d3.forceLink().id(function (d) { return d.index }))
+    .force("charge", d3.forceManyBody())
+    .force("forceX", d3.forceX(width / 2))
+    .force("forceY", d3.forceY(height / 2))
 
-force.linkStrength(0.05);
-force.gravity(0.2);
-force.linkDistance(100);
-force.start();
+force.nodes(nodes);
+force.force("link").links(edges);
+
+force.force("forceX").strength(0.5);
+force.force("forceY").strength(0.5);
+force.force("link").distance(50);
+force.force("link").strength(0.05);
+force.force("charge").strength(-40);
+
 force.on("tick", () => {
     reRender();
 });

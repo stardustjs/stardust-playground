@@ -3,8 +3,8 @@
     "compilerOptions": {
         "declaration": true,
         "jsx": "react",
-        "rootDir": "ts",
-        "outDir": "js",
+        "rootDir": "./src",
+        "outDir": "./dist",
         "module": "commonjs",
         "moduleResolution": "node",
         "target": "es5",

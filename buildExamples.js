@@ -1,7 +1,7 @@
 let fs = require("fs");
 let path = require("path");
 
-let examplesPrefix = "ts/examples";
+let examplesPrefix = "src/examples";
 let examples = [
     "isotype.js",
     "barChart.js",
@@ -16,8 +16,6 @@ let examples = [
     "spl.js"
 ];
 
-let reMetadata = /^[ \t]*\/\/\/[ \t]*([a-zA-Z0-9]+)[ \t]*\:[ \t]*(.*)$/gm;
-
 let allExamples = [];
 
 for(let ex of examples) {
@@ -30,6 +28,7 @@ for(let ex of examples) {
         jsCode: code.replace(/[ \t]*\/\/\/.*/g, "").replace(/^[ \t\n]*/, "").replace(/[ \t\n]*$/, "\n"),
         background: [ 1, 1, 1, 1 ]
     }
+    let reMetadata = /^[ \t]*\/\/\/[ \t]*([a-zA-Z0-9]+)[ \t]*\:[ \t]*(.*)$/gm;
     while((a = reMetadata.exec(code)) != null) {
         let name = a[1];
         let data = a[2];
@@ -53,4 +52,4 @@ let examplesDotTS = `
     export let examples: ExampleInfo[] = ${JSON.stringify(allExamples, null, 2)};
 `;
 
-fs.writeFileSync("ts/examples.ts", examplesDotTS, "utf-8")
+fs.writeFileSync("src/examples.ts", examplesDotTS, "utf-8")

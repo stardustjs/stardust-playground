@@ -3,7 +3,7 @@
 /// data: data/mnist.csv
 
 var marks = Stardust.mark.compile(`
-    import Rectangle, OutlinedRectangle from P2D;
+    import { Rectangle, OutlinedRectangle } from P2D;
 
     let size: float = 2;
     let spacing: float = 3;
@@ -75,7 +75,7 @@ var Nclasses = 10;
 var CM = [];
 var CMBin = [];
 
-var instances = DATA.map(function(d) {
+var instances = DATA.map(function (d) {
     return {
         label: parseInt(d.Label.substr(1)),
         assigned: parseInt(d.Assigned.substr(1)),
@@ -84,56 +84,56 @@ var instances = DATA.map(function(d) {
     };
 });
 
-for(var i = 0; i < Nclasses; i++) {
+for (var i = 0; i < Nclasses; i++) {
     CM[i] = [];
     CMBin[i] = [];
-    for(var j = 0; j < Nclasses; j++) {
+    for (var j = 0; j < Nclasses; j++) {
         CM[i][j] = 0;
         CMBin[i][j] = [];
-        for(var k = 0; k < Nbins; k++) {
+        for (var k = 0; k < Nbins; k++) {
             CMBin[i][j][k] = 0;
         }
     }
 }
 
-instances.sort(function(a, b) {
-    if(a.label == a.assigned) return b.label == b.assigned ? 0 : +1;
-    if(b.label == b.assigned) return a.label == a.assigned ? 0 : -1;
-    if(a.assigned != b.assigned)
+instances.sort(function (a, b) {
+    if (a.label == a.assigned) return b.label == b.assigned ? 0 : +1;
+    if (b.label == b.assigned) return a.label == a.assigned ? 0 : -1;
+    if (a.assigned != b.assigned)
         return a.assigned - b.assigned;
-    if(a.label != b.label)
+    if (a.label != b.label)
         return a.label - b.label;
     return a.score - b.score;
 })
 
-instances.forEach(function(d) {
+instances.forEach(function (d) {
     d.CMIndex = CM[d.label][d.assigned];
     CM[d.label][d.assigned] += 1;
     d.binIndex = CMBin[0][d.assigned][d.scoreBin];
     CMBin[0][d.assigned][d.scoreBin] += 1;
 });
 
-instances.sort(function(a, b) {
-    if(a.label == a.assigned) return b.label == b.assigned ? 0 : +1;
-    if(b.label == b.assigned) return a.label == a.assigned ? 0 : -1;
-    if(a.assigned != b.assigned)
+instances.sort(function (a, b) {
+    if (a.label == a.assigned) return b.label == b.assigned ? 0 : +1;
+    if (b.label == b.assigned) return a.label == a.assigned ? 0 : -1;
+    if (a.assigned != b.assigned)
         return -(a.assigned - b.assigned);
-    if(a.label != b.label)
+    if (a.label != b.label)
         return a.label - b.label;
     return a.score - b.score;
 })
 
-instances.forEach(function(d) {
+instances.forEach(function (d) {
     d.binIndex2 = CMBin[1][d.label][d.scoreBin];
     CMBin[1][d.label][d.scoreBin] += 1;
 });
 
-instances.forEach(function(d) {
+instances.forEach(function (d) {
     d.CMCount = CM[d.label][d.assigned];
 });
 
-var colors = [[31,119,180],[255,127,14],[44,160,44],[214,39,40],[148,103,189],[140,86,75],[227,119,194],[127,127,127],[188,189,34],[23,190,207]];
-colors = colors.map((x) => [ x[0] / 255, x[1] / 255, x[2] / 255, 1 ]);
+var colors = [[31, 119, 180], [255, 127, 14], [44, 160, 44], [214, 39, 40], [148, 103, 189], [140, 86, 75], [227, 119, 194], [127, 127, 127], [188, 189, 34], [23, 190, 207]];
+colors = colors.map((x) => [x[0] / 255, x[1] / 255, x[2] / 255, 1]);
 
 var mark = Stardust.mark.create(marks.BinnedSquare, platform);
 mark.attr("color", (d) => colors[d.label]);

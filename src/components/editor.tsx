@@ -12,7 +12,7 @@ export interface Props {
 
 export class MonacoEditor extends React.Component<Props, {}> {
     refs: {
-        [ name: string ]: Element;
+        [name: string]: Element;
         editor: HTMLDivElement
     };
     editor: monaco.editor.IStandaloneCodeEditor;
@@ -36,11 +36,11 @@ export class MonacoEditor extends React.Component<Props, {}> {
             this.editor = monaco.editor.create(this.refs.editor, {
                 value: this.props.value,
                 language: this.props.language,
-                lineNumbers: true,
+                lineNumbers: "on",
                 fontSize: 11
             });
             this.editor.onDidChangeModelContent((event) => {
-                if(this.props.onChange) {
+                if (this.props.onChange) {
                     this.props.onChange(this.editor.getValue());
                 }
             });
@@ -49,17 +49,17 @@ export class MonacoEditor extends React.Component<Props, {}> {
     }
 
     public componentDidUpdate(prevProps: Props) {
-        if(!this.editor) return;
-        let newSize = [ this.refs.editor.getBoundingClientRect().width, this.refs.editor.getBoundingClientRect().height ];
-        if(!this._previousSize || this._previousSize[0] != newSize[0] || this._previousSize[1] != newSize[1]) {
+        if (!this.editor) return;
+        let newSize = [this.refs.editor.getBoundingClientRect().width, this.refs.editor.getBoundingClientRect().height];
+        if (!this._previousSize || this._previousSize[0] != newSize[0] || this._previousSize[1] != newSize[1]) {
             this.editor.layout();
             this._previousSize = newSize;
         }
 
-        if(prevProps.value !== this.props.value && this.editor) {
+        if (prevProps.value !== this.props.value && this.editor) {
             this.editor.setValue(this.props.value);
         }
-        if(prevProps.language !== this.props.language) {
+        if (prevProps.language !== this.props.language) {
             throw new Error('<MonacoEditor> language cannot be changed.');
         }
     }

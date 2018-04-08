@@ -10,12 +10,12 @@ scale.attr("k2", 3);
 scale.attr("k3", 13.2);
 scale.attr("size", 1);
 mark.attr("center", scale(d => d));
-mark.attr("color", [ 0, 0, 0, 0.1 ]);
+mark.attr("color", [0, 0, 0, 0.1]);
 mark.attr("radius", 1);
 
 var data = [];
 var N = 100000;
-for(var k = 0; k < N; k++) {
+for (var k = 0; k < N; k++) {
     var x = k / N * Math.PI * 10;
     data.push(x);
 }

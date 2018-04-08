@@ -34,7 +34,7 @@ export interface IS3RenderingViewState {
 
 export class S3RenderingView extends React.Component<IS3RenderingViewProps, IS3RenderingViewState> {
     refs: {
-        [ name: string ]: Element,
+        [name: string]: Element,
         canvas: HTMLCanvasElement,
         svg: SVGElement
     }
@@ -71,12 +71,12 @@ export class S3RenderingView extends React.Component<IS3RenderingViewProps, IS3R
 
     public componentDidUpdate(prevProps: IS3RenderingViewProps) {
         this._GL.clearColor(this.props.backgroundColor[0], this.props.backgroundColor[1], this.props.backgroundColor[2], 1);
-        if(prevProps.jsCode != this.props.jsCode || prevProps.viewType != this.props.viewType || prevProps.compileIndex != this.props.compileIndex) {
+        if (prevProps.jsCode != this.props.jsCode || prevProps.viewType != this.props.viewType || prevProps.compileIndex != this.props.compileIndex) {
             this.setViewport();
             this.startUserProgram();
-        } else if(prevProps.viewType != this.props.viewType || prevProps.width != this.props.width || prevProps.height != this.props.height) {
+        } else if (prevProps.viewType != this.props.viewType || prevProps.width != this.props.width || prevProps.height != this.props.height) {
             this.setViewport();
-            if(this._reRender) {
+            if (this._reRender) {
                 this._reRender();
             }
         }
@@ -89,7 +89,7 @@ export class S3RenderingView extends React.Component<IS3RenderingViewProps, IS3R
     public printMessage(message: string) {
         this.state.messages.push(message);
         let maxMessages = 10;
-        if(this.state.messages.length > maxMessages) {
+        if (this.state.messages.length > maxMessages) {
             this.state.messages.splice(0, this.state.messages.length - maxMessages);
         }
         this.setState({
@@ -126,19 +126,19 @@ export class S3RenderingView extends React.Component<IS3RenderingViewProps, IS3R
         this.stopUserProgram();
         this.setViewport();
         let dataFile = this.props.dataFile;
-        if(dataFile != null && dataFile != "") {
-            if(dataFile.match(/\.csv$/i)) {
-                d3.csv(dataFile, (err, data) => {
+        if (dataFile != null && dataFile != "") {
+            if (dataFile.match(/\.csv$/i)) {
+                d3.csv(dataFile).then((data) => {
                     this.startUserProgramWithData(data);
                 });
             }
-            if(dataFile.match(/\.tsv$/i)) {
-                d3.tsv(dataFile, (err, data) => {
+            if (dataFile.match(/\.tsv$/i)) {
+                d3.tsv(dataFile).then((data) => {
                     this.startUserProgramWithData(data);
                 });
             }
-            if(dataFile.match(/\.json$/i)) {
-                d3.json(dataFile, (err, data) => {
+            if (dataFile.match(/\.json$/i)) {
+                d3.json(dataFile).then((data) => {
                     this.startUserProgramWithData(data);
                 });
             }
@@ -168,55 +168,55 @@ export class S3RenderingView extends React.Component<IS3RenderingViewProps, IS3R
             this.addControl(control);
         };
         let userRender: () => any;
-            let userAnimate: (t: number) => any = null;
-            let userFinalize: () => any = null;
-            let doRenderReal = () => {
-                GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
-                try {
-                    if(userRender) userRender();
-                } catch(e) {
-                    this.printMessage(e.message);
-                }
+        let userAnimate: (t: number) => any = null;
+        let userFinalize: () => any = null;
+        let doRenderReal = () => {
+            GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
+            try {
+                if (userRender) userRender();
+            } catch (e) {
+                this.printMessage(e.message);
             }
-            let doRender = () => {
-                requestAnimationFrame(doRenderReal);
-            };
-            let runUserCode = () => {
-                var render: any = undefined;
-                var animate: any = undefined;
-                var finalize: any = undefined;
-                let DATA = data;
-                let d3 = D3;
-                let s3 = Stardust;
-                (window as any)["d3"] = d3;
-                (window as any)["Stardust"] = Stardust;
-                (window as any)["platform"] = this._platform;
-                let GL = this._GL;
-                let svg = d3.select(this.refs.svg);
-                let reRender = doRender;
-                let print = (m: string) => this.printMessage(m);
-                try {
-                    eval(this.props.jsCode + "; userRender = render; userAnimate = animate; userFinalize = finalize;");
-                } catch(e) {
-                    this.printMessage(e.message);
-                    this.printMessage(e.stack);
-                }
-            };
-            runUserCode();
-            doRender();
-            let t0 = new Date().getTime();
-            if(userAnimate) {
-                this._timerCurrent = setInterval(() => {
-                    let t = (new Date().getTime() - t0) / 1000;
-                    userAnimate(t);
-                    doRender();
-                }, 10);
+        }
+        let doRender = () => {
+            requestAnimationFrame(doRenderReal);
+        };
+        let runUserCode = () => {
+            var render: any = undefined;
+            var animate: any = undefined;
+            var finalize: any = undefined;
+            let DATA = data;
+            let d3 = D3;
+            let s3 = Stardust;
+            (window as any)["d3"] = d3;
+            (window as any)["Stardust"] = Stardust;
+            (window as any)["platform"] = this._platform;
+            let GL = this._GL;
+            let svg = d3.select(this.refs.svg);
+            let reRender = doRender;
+            let print = (m: string) => this.printMessage(m);
+            try {
+                eval(this.props.jsCode + "; userRender = render; userAnimate = animate; userFinalize = finalize;");
+            } catch (e) {
+                this.printMessage(e.message);
+                this.printMessage(e.stack);
             }
-            this._reRender = doRender;
-            this._userCodeFinalize = userFinalize;
+        };
+        runUserCode();
+        doRender();
+        let t0 = new Date().getTime();
+        if (userAnimate) {
+            this._timerCurrent = setInterval(() => {
+                let t = (new Date().getTime() - t0) / 1000;
+                userAnimate(t);
+                doRender();
+            }, 10);
+        }
+        this._reRender = doRender;
+        this._userCodeFinalize = userFinalize;
     }
 
-    public onMouseDown(event: React.MouseEvent) {
+    public onMouseDown(event: React.MouseEvent<Element>) {
         let pose0 = this._platform.pose;
         let x0 = event.screenX as number;
         let y0 = event.screenY as number;
@@ -225,7 +225,7 @@ export class S3RenderingView extends React.Component<IS3RenderingViewProps, IS3R
             let y1 = e.screenY as number;
             let dx = x1 - x0;
             let dy = y1 - y0;
-            if(dx == 0 && dy == 0) {
+            if (dx == 0 && dy == 0) {
                 this._platform.setPose(pose0);
             } else {
                 let len = Math.sqrt(dx * dx + dy * dy);
@@ -236,7 +236,7 @@ export class S3RenderingView extends React.Component<IS3RenderingViewProps, IS3R
                 );
                 this._platform.setPose(newPose);
             }
-            if(this._reRender) this._reRender();
+            if (this._reRender) this._reRender();
         };
         let onMouseUp = () => {
             window.removeEventListener("mousemove", onMouseMove);
@@ -250,13 +250,13 @@ export class S3RenderingView extends React.Component<IS3RenderingViewProps, IS3R
         let platform = this._platform;
         let canvas = this.refs.canvas;
         let scale = 2;
-        if(canvas.width != this.props.width * scale) {
+        if (canvas.width != this.props.width * scale) {
             canvas.width = this.props.width * scale;
         }
-        if(canvas.height != this.props.height * scale) {
+        if (canvas.height != this.props.height * scale) {
             canvas.height = this.props.height * scale;
         }
-        if(this.props.viewType == "3D") {
+        if (this.props.viewType == "3D") {
             platform.set3DView(Math.PI / 4, this.props.width / this.props.height, 0.1, 1000);
             platform.setPose(new Stardust.Pose(new Stardust.Vector3(0, 0, 500), new Stardust.Quaternion(0, 0, 0, 1)));
         } else {
@@ -267,11 +267,11 @@ export class S3RenderingView extends React.Component<IS3RenderingViewProps, IS3R
     }
 
     public stopUserProgram() {
-        if(this._timerCurrent) {
+        if (this._timerCurrent) {
             clearInterval(this._timerCurrent);
             this._timerCurrent = null;
         }
-        if(this._userCodeFinalize) {
+        if (this._userCodeFinalize) {
             this._userCodeFinalize();
         }
         this._userCodeFinalize = null;
@@ -279,7 +279,7 @@ export class S3RenderingView extends React.Component<IS3RenderingViewProps, IS3R
     }
 
     public renderControl(control: ControlInfo, index: number) {
-        if(control.type == "slider") {
+        if (control.type == "slider") {
             let c = control as ControlInfoSlider;
             let cval = (c.value - c.min) / (c.max - c.min) * 1000;
             return (
@@ -298,14 +298,14 @@ export class S3RenderingView extends React.Component<IS3RenderingViewProps, IS3R
     public render() {
         return (
             <div className="s3rendering-view" style={{ width: this.props.width + "px", height: this.props.height + "px" }}>
-                <canvas ref="canvas" style={{ width: this.props.width + "px", height: this.props.height + "px" }} onMouseDown={ this.props.viewType == "3D" ? ((e) => this.onMouseDown(e)) : null} />
+                <canvas ref="canvas" style={{ width: this.props.width + "px", height: this.props.height + "px" }} onMouseDown={this.props.viewType == "3D" ? ((e) => this.onMouseDown(e)) : null} />
                 <svg ref="svg" style={{ width: this.props.width + "px", height: this.props.height + "px" }} />
                 <div className="overlay">
                     <div className="messages">
-                    { this.state.messages.map((m, index) => <pre key={`m${index}`}>{m}</pre>) }
+                        {this.state.messages.map((m, index) => <pre key={`m${index}`}>{m}</pre>)}
                     </div>
                     <div className="controls">
-                    { this.state.controls.map((c, index) => this.renderControl(c, index)) }
+                        {this.state.controls.map((c, index) => this.renderControl(c, index))}
                     </div>
                 </div>
             </div>

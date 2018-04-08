@@ -2,7 +2,7 @@
 /// type: 2D
 
 var marks = Stardust.mark.compile(`
-    import Rectangle from P2D;
+    import { Rectangle } from P2D;
 
     mark Bar(
         index: float,
@@ -35,7 +35,7 @@ addSlider("Scale", area, "scale", 30, 1, 100);
 
 let array = [];
 
-for(let i = 0; i < 100000; i++) array.push(Math.cos(i / 2534) + Math.sin(i /  534));
+for (let i = 0; i < 100000; i++) array.push(Math.cos(i / 2534) + Math.sin(i / 534));
 
 area.attr("N", array.length);
 area.data(array);
@@ -51,7 +51,7 @@ bar.attr("scale", 30);
 bar.attr("y0", 400);
 
 array = [];
-for(let i = 0; i < 20; i++) array.push(Math.cos(i) + 2);
+for (let i = 0; i < 20; i++) array.push(Math.cos(i) + 2);
 bar.attr("N", array.length);
 bar.data(array);
 

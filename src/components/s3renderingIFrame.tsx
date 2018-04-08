@@ -17,7 +17,7 @@ let iFrameHTMLTemplate = `
         </head>
         <body>
             <script type="text/javascript" src="_USER_CODE_DATAURL_"></script>
-            <script type="text/javascript" src="runtime/iframe-webgl.js"></script>
+            <script type="text/javascript" src="runtime.bundle.js"></script>
         </body>
     </html>
 `;
@@ -64,11 +64,11 @@ export class S3OverlayView extends React.Component<IS3OverlayViewProps, IS3Overl
         });
     }
 
-    private componentDidMount() {
+    public componentDidMount() {
         window.addEventListener("message", this.onMessage);
     }
 
-    private componentWillUnmount() {
+    public componentWillUnmount() {
         window.removeEventListener("message", this.onMessage);
     }
 

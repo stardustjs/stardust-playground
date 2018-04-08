@@ -40,9 +40,9 @@ function printMessage(message: string, type: string) {
 let controlCallbacks = new Stardust.Dictionary<(value: protocol.ControlValue) => void>();
 window.onmessage = (e: MessageEvent) => {
     let msg = e.data as protocol.IFrameMessage
-    switch(msg.type) {
+    switch (msg.type) {
         case "control.event": {
-            if(controlCallbacks.has(msg.controlEvent.name)) {
+            if (controlCallbacks.has(msg.controlEvent.name)) {
                 controlCallbacks.get(msg.controlEvent.name)(msg.controlEvent.value);
             }
         } break;
@@ -58,10 +58,10 @@ svg.attr("height", window.innerHeight);
 
 let platform: Stardust.WebGLCanvasPlatform2D | Stardust.WebGLCanvasPlatform3D;
 
-if(UserCodeConfig.viewType == "2D") {
+if (UserCodeConfig.viewType == "2D") {
     platform = Stardust.platform("webgl-2d", canvasNode, window.innerWidth, window.innerHeight) as any as Stardust.WebGLCanvasPlatform2D;
 }
-if(UserCodeConfig.viewType == "3D") {
+if (UserCodeConfig.viewType == "3D") {
     platform = Stardust.platform("webgl-3d", canvasNode, window.innerWidth, window.innerHeight) as any as Stardust.WebGLCanvasPlatform3D;
     platform.set3DView(Math.PI / 4, 0.1, 1000);
     platform.setPose(new Stardust.Pose(new Stardust.Vector3(0, 0, 500), new Stardust.Quaternion(0, 0, 0, 1)));
@@ -74,7 +74,7 @@ if(UserCodeConfig.viewType == "3D") {
             let y1 = e.screenY as number;
             let dx = x1 - x0;
             let dy = y1 - y0;
-            if(dx == 0 && dy == 0) {
+            if (dx == 0 && dy == 0) {
                 platform.setPose(pose0);
             } else {
                 let len = Math.sqrt(dx * dx + dy * dy);
@@ -97,11 +97,11 @@ if(UserCodeConfig.viewType == "3D") {
 }
 
 function reRender() {
-    platform.clear(UserCodeConfig.backgroundColor || [ 1, 1, 1, 1 ]);
-    if(UserCodeExports.render) {
+    platform.clear(UserCodeConfig.backgroundColor || [1, 1, 1, 1]);
+    if (UserCodeExports.render) {
         try {
             UserCodeExports.render();
-        } catch(e) {
+        } catch (e) {
             printMessage("Error at Javascript code render(): " + e.message + "\n" + e.stack, "error");
             return;
         }
@@ -157,19 +157,19 @@ function doStartup(data: any) {
     setWindowProperty("DATA", data);
     try {
         UserCode();
-    } catch(e) {
+    } catch (e) {
         printMessage("Error at Javascript code: " + e.message + "\n" + e.stack, "error");
         return;
     }
-    if(UserCodeExports.setup) {
+    if (UserCodeExports.setup) {
         try {
             UserCodeExports.setup();
-        } catch(e) {
+        } catch (e) {
             printMessage("Error at Javascript code setup(): " + e.message + "\n" + e.stack, "error");
             return;
         }
     }
-    if(UserCodeExports.animate) {
+    if (UserCodeExports.animate) {
         let t0 = new Date().getTime();
         let totalFrames = 0;
         let animateFunction = () => {
@@ -177,14 +177,14 @@ function doStartup(data: any) {
             let t = (t1 - t0) / 1000;
             try {
                 UserCodeExports.animate(t);
-            } catch(e) {
+            } catch (e) {
                 printMessage("Error at Javascript code animate(): " + e.message + "\n" + e.stack, "error");
                 return;
             }
             totalFrames += 1;
             reRender();
             requestAnimationFrame(animateFunction);
-            if(totalFrames % 100 == 0) {
+            if (totalFrames % 100 == 0) {
                 console.log("FPS", (totalFrames / t).toFixed(1));
             }
         }
@@ -193,19 +193,19 @@ function doStartup(data: any) {
     reRender();
 }
 
-if(UserCodeConfig.dataFile != null && UserCodeConfig.dataFile != "") {
-    if(UserCodeConfig.dataFile.match(/\.csv$/i)) {
-        d3.csv(UserCodeConfig.dataFile, (err, data) => {
+if (UserCodeConfig.dataFile != null && UserCodeConfig.dataFile != "") {
+    if (UserCodeConfig.dataFile.match(/\.csv$/i)) {
+        d3.csv(UserCodeConfig.dataFile).then((data) => {
             doStartup(data);
         });
     }
-    if(UserCodeConfig.dataFile.match(/\.tsv$/i)) {
-        d3.tsv(UserCodeConfig.dataFile, (err, data) => {
+    if (UserCodeConfig.dataFile.match(/\.tsv$/i)) {
+        d3.tsv(UserCodeConfig.dataFile).then((data) => {
             doStartup(data);
         });
     }
-    if(UserCodeConfig.dataFile.match(/\.json$/i)) {
-        d3.json(UserCodeConfig.dataFile, (err, data) => {
+    if (UserCodeConfig.dataFile.match(/\.json$/i)) {
+        d3.json(UserCodeConfig.dataFile).then((data) => {
             doStartup(data);
         });
     }

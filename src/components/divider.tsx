@@ -7,7 +7,7 @@ export class VerticalDivider extends React.Component<{
     onDrag: (newLeft: number) => void
 }, {}> {
 
-    public onMouseDown(event: React.MouseEvent) {
+    public onMouseDown(event: React.MouseEvent<Element>) {
         let x0 = event.screenX;
         let l0 = this.props.left;
         let onMouseMove = (event: MouseEvent) => {
@@ -34,7 +34,7 @@ export class HorizontalDivider extends React.Component<{
     onDrag: (newtop: number) => void
 }, {}> {
 
-    public onMouseDown(event: React.MouseEvent) {
+    public onMouseDown(event: React.MouseEvent<Element>) {
         let y0 = event.screenY;
         let t0 = this.props.top;
         let onMouseMove = (event: MouseEvent) => {

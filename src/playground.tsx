@@ -11,18 +11,23 @@ import { HorizontalDivider, VerticalDivider } from "./components/divider";
 import { examples } from "./examples";
 
 function getCSSColor(color: number[]): string {
-    let c = d3.rgb(color[0] * 255, color[1] * 255, color[2] * 255);
-    return c.toString();
+    let r = (color[0] * 255).toString(16);
+    while (r.length < 2) r = "0" + r;
+    let g = (color[1] * 255).toString(16);
+    while (g.length < 2) g = "0" + g;
+    let b = (color[2] * 255).toString(16);
+    while (b.length < 2) b = "0" + b;
+    return "#" + r + g + b;
 }
 
 function parseCSSColor(str: string): number[] {
     let rgb = d3.rgb(str);
-    return [ rgb.r / 255, rgb.g / 255, rgb.b / 255 ];
+    return [rgb.r / 255, rgb.g / 255, rgb.b / 255];
 }
 
 export class ToolbarView extends React.Component<{}, {}> {
     refs: {
-        [ name: string ]: Element;
+        [name: string]: Element;
         selectExample: HTMLSelectElement;
     }
 
@@ -32,7 +37,7 @@ export class ToolbarView extends React.Component<{}, {}> {
                 <span className="title"><a href="https://stardust-vis.github.io/">Stardust</a> Playground</span>
                 {"Load example: "}
                 <select ref="selectExample" onChange={(event) => new Actions.LoadExample(this.refs.selectExample.value).dispatch()}>
-                { examples.map((example, index) => <option key={index} value={example.name}>{example.name}</option>) }
+                    {examples.map((example, index) => <option key={index} value={example.name}>{example.name}</option>)}
                 </select>
                 {" "}
                 <button onClick={(event) => new Actions.Compile().dispatch()}>Run</button>
@@ -63,7 +68,7 @@ export interface IPlaygroundState {
 
 export class PlaygroundRootView extends React.Component<{}, IPlaygroundState> {
     refs: {
-        [ name: string ]: Element | MonacoEditor;
+        [name: string]: Element | MonacoEditor;
         jsCodeEditor: MonacoEditor;
         inputDataFile: HTMLInputElement;
         input3D: HTMLInputElement;
@@ -92,9 +97,9 @@ export class PlaygroundRootView extends React.Component<{}, IPlaygroundState> {
 
     public componentDidMount() {
         Actions.GlobalDispatcher.register((action) => {
-            if(action instanceof Actions.LoadExample) {
+            if (action instanceof Actions.LoadExample) {
                 let example = examples.filter(e => e.name == action.exampleName)[0];
-                if(!example) return;
+                if (!example) return;
                 this.setState({
                     dataFile: example.dataFile,
                     viewType: example.viewType,
@@ -109,7 +114,7 @@ export class PlaygroundRootView extends React.Component<{}, IPlaygroundState> {
                     }
                 } as any);
             }
-            if(action instanceof Actions.Compile) {
+            if (action instanceof Actions.Compile) {
                 this.setState({
                     compiled: {
                         dataFile: this.state.dataFile,
@@ -155,7 +160,7 @@ export class PlaygroundRootView extends React.Component<{}, IPlaygroundState> {
                 </div>
                 <VerticalDivider left={this.state.panelWidth} onDrag={(newLeft) => this.setState({ panelWidth: Math.min(this.state.width - 30, Math.max(30, newLeft)) } as any)} />
                 <div className="s3rendering-container" style={{ left: this.state.panelWidth + 5 + "px" }}>
-                    { this.state.compiled ? <S3RenderingView
+                    {this.state.compiled ? <S3RenderingView
                         dataFile={this.state.compiled.dataFile}
                         viewType={this.state.compiled.viewType}
                         jsCode={this.state.compiled.jsCode}
@@ -163,7 +168,7 @@ export class PlaygroundRootView extends React.Component<{}, IPlaygroundState> {
                         height={this.state.height - 30}
                         compileIndex={this.state.compiled.compileIndex}
                         backgroundColor={this.state.compiled.backgroundColor}
-                    /> : null }
+                    /> : null}
                 </div>
             </div>
         );

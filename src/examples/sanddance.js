@@ -6,7 +6,7 @@
 let demovote = DATA;
 
 let mark = Stardust.mark.compile(`
-    import Cube from P3D;
+    import { Cube } from P3D;
 
     let longitude: float;
     let latitude: float;
@@ -77,8 +77,8 @@ demovote.forEach(d => {
 let longitudeExtent = d3.extent(demovote, d => d.Longitude);
 let latitudeExtent = d3.extent(demovote, d => d.Latitude);
 
-let longitudeScale = d3.scale.linear().domain(longitudeExtent).range([ 0, 1 ])
-let latitudeScale = d3.scale.linear().domain(latitudeExtent).range([ 0, 1 ])
+let longitudeScale = d3.scaleLinear().domain(longitudeExtent).range([0, 1])
+let latitudeScale = d3.scaleLinear().domain(latitudeExtent).range([0, 1])
 
 // Map states to integer.
 let states = new Set();
@@ -100,7 +100,7 @@ let yBinCount = 7;
 demovote.sort((a, b) => a.Obama - b.Obama);
 demovote.forEach((d, i) => {
     d.index = i;
-    if(state2count[d.StateAbb] == null) state2count[d.StateAbb] = 0;
+    if (state2count[d.StateAbb] == null) state2count[d.StateAbb] = 0;
     d.stateBinIndex = state2count[d.StateAbb]++;
 
     let xBin = Math.floor(longitudeScale(d.Longitude) * xBinCount);
@@ -108,7 +108,7 @@ demovote.forEach((d, i) => {
     let bin = yBin * (xBinCount + 1) + xBin;
     d.xBin = xBin;
     d.yBin = yBin;
-    if(xyBinCounter[bin] == null) xyBinCounter[bin] = 0;
+    if (xyBinCounter[bin] == null) xyBinCounter[bin] = 0;
     d.xyBinIndex = xyBinCounter[bin]++;
 });
 
@@ -118,11 +118,11 @@ let s2 = d3.interpolateLab("#f7f7f7", "#ca0020");
 
 let strToRGBA = (str) => {
     let rgb = d3.rgb(str);
-    return [ rgb.r / 255, rgb.g / 255, rgb.b / 255, 1 ];
+    return [rgb.r / 255, rgb.g / 255, rgb.b / 255, 1];
 }
 
 let scaleColor = (value) => {
-    if(value > 0.5) {
+    if (value > 0.5) {
         return strToRGBA(s1((value - 0.5) * 2));
     } else {
         return strToRGBA(s2((0.5 - value) * 2));
@@ -141,17 +141,17 @@ marks
     .attr("color", (d) => scaleColor(d.Obama));
 
 function setT(t) {
-    if(t >= 0 && t <= 1) {
+    if (t >= 0 && t <= 1) {
         let tt = t * 1.3 - 0.3;
         marks.attr("t1", 1 - tt).attr("t2", tt).attr("t3", 0).attr("ki1", -0.3).attr("ki2", +0.3).attr("ki3", 0);
-    } else if(t >= 1 && t <= 2) {
+    } else if (t >= 1 && t <= 2) {
         marks.attr("t1", 0).attr("t2", 1).attr("t3", 0).attr("ki1", 0).attr("ki2", 0).attr("ki3", 0);
-    } else if(t >= 2 && t <= 3) {
+    } else if (t >= 2 && t <= 3) {
         let tt = (t - 2) * 1.3 - 0.3;
         marks.attr("t1", 0).attr("t2", 1 - tt).attr("t3", tt).attr("ki1", 0).attr("ki2", -0.3).attr("ki3", +0.3);
-    } else if(t >= 3 && t <= 4) {
+    } else if (t >= 3 && t <= 4) {
         marks.attr("t1", 0).attr("t2", 0).attr("t3", 1).attr("ki1", 0).attr("ki2", 0).attr("ki3", 0);
-    } else if(t >= 4 && t <= 5) {
+    } else if (t >= 4 && t <= 5) {
         let tt = (t - 4) * 1.3 - 0.3;
         marks.attr("t1", tt).attr("t2", 0).attr("t3", 1 - tt).attr("ki1", +0.3).attr("ki2", 0).attr("ki3", -0.3);
     } else {
