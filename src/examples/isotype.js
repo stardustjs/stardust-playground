@@ -2,7 +2,7 @@
 /// type: 2D
 
 
-let circle = new Stardust.mark.circle();
+let circle = Stardust.mark.circle();
 
 // Create the mark object.
 let circles = Stardust.mark.create(circle, platform);

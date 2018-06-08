@@ -1,6 +1,7 @@
 /// <reference path="../../node_modules/monaco-editor/monaco.d.ts" />
 
 import * as React from 'react';
+import * as d3 from "d3";
 
 declare const require: any;
 
@@ -43,6 +44,15 @@ export class MonacoEditor extends React.Component<Props, {}> {
                 if (this.props.onChange) {
                     this.props.onChange(this.editor.getValue());
                 }
+            });
+            d3.text("stardust-bundle.d.ts").then((content) => {
+                monaco.languages.typescript.javascriptDefaults.addExtraLib(content, "stardust-bundle.d.ts");
+                monaco.languages.typescript.javascriptDefaults.addExtraLib(`
+                    declare module Stardust {
+                        import main = require('stardust-bundle/stardust');
+                        export = main;
+                    }
+                `, "Stardust.d.ts");
             });
             this.forceUpdate();
         });
