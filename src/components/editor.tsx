@@ -1,9 +1,6 @@
-/// <reference path="../../node_modules/monaco-editor/monaco.d.ts" />
-
+import * as monaco from 'monaco-editor';
 import * as React from 'react';
 import * as d3 from "d3";
-
-declare const require: any;
 
 export interface Props {
     value: string;
@@ -33,29 +30,28 @@ export class MonacoEditor extends React.Component<Props, {}> {
         // Monaco requires the AMD module loader to be present on the page. It is not yet
         // compatible with ES6 imports. Once that happens, we can get rid of this.
         // See https://github.com/Microsoft/monaco-editor/issues/18
-        (window as any)["require"](["vs/editor/editor.main"], () => {
-            this.editor = monaco.editor.create(this.refs.editor, {
-                value: this.props.value,
-                language: this.props.language,
-                lineNumbers: "on",
-                fontSize: 11
-            });
-            this.editor.onDidChangeModelContent((event) => {
-                if (this.props.onChange) {
-                    this.props.onChange(this.editor.getValue());
-                }
-            });
-            d3.text("stardust-bundle.d.ts").then((content) => {
-                monaco.languages.typescript.javascriptDefaults.addExtraLib(content, "stardust-bundle.d.ts");
-                monaco.languages.typescript.javascriptDefaults.addExtraLib(`
+        this.editor = monaco.editor.create(this.refs.editor, {
+            value: this.props.value,
+            language: this.props.language,
+            lineNumbers: "on",
+            fontSize: 11,
+            minimap: { enabled: false }
+        });
+        this.editor.onDidChangeModelContent((event) => {
+            if (this.props.onChange) {
+                this.props.onChange(this.editor.getValue());
+            }
+        });
+        d3.text("stardust-bundle.d.ts").then((content) => {
+            monaco.languages.typescript.javascriptDefaults.addExtraLib(content, "stardust-bundle.d.ts");
+            monaco.languages.typescript.javascriptDefaults.addExtraLib(`
                     declare module Stardust {
                         import main = require('stardust-bundle/stardust');
                         export = main;
                     }
                 `, "Stardust.d.ts");
-            });
-            this.forceUpdate();
         });
+        this.forceUpdate();
     }
 
     public componentDidUpdate(prevProps: Props) {
@@ -67,7 +63,10 @@ export class MonacoEditor extends React.Component<Props, {}> {
         }
 
         if (prevProps.value !== this.props.value && this.editor) {
-            this.editor.setValue(this.props.value);
+            let editorValue = this.editor.getValue();
+            if (editorValue != this.props.value) {
+                this.editor.setValue(this.props.value);
+            }
         }
         if (prevProps.language !== this.props.language) {
             throw new Error('<MonacoEditor> language cannot be changed.');
